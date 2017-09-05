@@ -1,11 +1,17 @@
 # a11y-devtools
 
 ## Description
-Run accessibility tests in Chrome at dev time.
+Run accessibility tests in Chrome at development time.
 
 This will enable running accessibility tests via Tenon on:
 - static sites (via url)
 - dynamic sites (via browser navigation)
+
+## How It Works
+- Opens a headless version of Chrome.
+- Executes your test commands to drive Chrome via DevTools API.
+- Sends HTML source to Tenon.
+- Creates Tenon report locally and on tenon.io.
 
 ## Requirements
 This requires you to have set up an account and API key with tenon.io.
@@ -19,7 +25,7 @@ This requires you to have set up an account and API key with tenon.io.
   - Set up a new Project in your tenon account. Make note of the `projectID`.
 - Copy the example file and modify per your info above.
 - Add tests.
-- Run via `node <your_test_file>.js`;
+- Run via `babel-node <your_test_file>.js`; (babel-node if you're on node v6.x)
 - Your report will be written locally as well as being displayed in your 
   Tenon project via the Tenon.io site.
 
