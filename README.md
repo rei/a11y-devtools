@@ -17,13 +17,15 @@ This will enable running accessibility tests via Tenon on:
 This requires you to have set up an account and API key with tenon.io.
 
 ## Installation
-- Clone this repo and run an `npm install`;
+- Create a local npm project with this module as a dependency.
+  - `npm init`
+  - `npm install --save https://github.com/rei/a11y-devtools.git`
 
 ## Usage
 - Sign into tenon.io and
   - Copy your API key from tenon.io.
   - Set up a new Project in your tenon account. Make note of the `projectID`.
-- Copy the example file and modify per your info above.
+- Copy the example file into your project directory and modify per your info above.
 - Add tests.
 - Run via `babel-node <your_test_file>.js`; (babel-node if you're on node v6.x)
 - Your report will be written locally as well as being displayed in your 
@@ -39,6 +41,7 @@ This requires you to have set up an account and API key with tenon.io.
   timing. See the [frame.waitForX commands](https://github.com/GoogleChrome/puppeteer/blob/HEAD/docs/api.md#framewaitforselectororfunctionortimeout-options).
   
 ## Todo
+- Unit tests.
 - Currently, due to CentOS not supporting Chrome, this tool can only be run
   locally (for now).
 - Create Docker container for this tool.
