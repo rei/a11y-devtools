@@ -14,6 +14,7 @@ let ra = mod.init({
 })
 
 // Test 1
+// 1st arg: the tenon docID (Note, it must be
 ra.run('rei.com_learn_page', async page => {
   await page.goto('http://www.rei.com/learn.html')
 });
