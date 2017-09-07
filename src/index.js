@@ -3,6 +3,7 @@ const Tenon = require('tenon-node');
 const tenonReporters = require('tenon-reporters');
 const R = require('ramda');
 const fs = require('fs');
+const path = require('path');
 
 let globalOpts;
 
@@ -12,12 +13,24 @@ const tenonCreateReport = function tenonRunReport(opts) {
   return new Promise((resolve, reject) => {
     console.log('[Tenon] Creating report..');
     const reportFilename = `${opts.docID}.html` || 'a11y-report.html';
+
+    // Create reports dir if it doesn't already exist.
+    const cwd = process.cwd();
+    const reportsDir = path.join(cwd, 'reports');
+    const reportFile = path.join(reportsDir, reportFilename);
+
+    if (!fs.existsSync(reportsDir)) {
+      console.log('Creating reports directory..');
+      fs.mkdirSync(reportsDir);
+    }
+
     tenonReporters.HTML(localOpts.results, (err1, report) => {
       if (err1) {
         reject(err1);
       }
+
       console.log(`[Tenon] Writing report to ${reportFilename}.`);
-      fs.writeFile(reportFilename, report, (err2) => {
+      fs.writeFile(reportFile, report, (err2) => {
         reject(err2);
       });
       resolve(report);
@@ -55,14 +68,12 @@ async function runTenon(opts) {
 
   try {
     results = await tenonCheckSource(localOpts);
-    console.log('Ran Tenon..');
   } catch (e) {
-    console.log(e);
+    console.error(e);
   }
   return Object.assign({}, localOpts, {
     results,
   });
-  // return results;
 }
 
 /**
