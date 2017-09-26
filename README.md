@@ -42,7 +42,7 @@ This requires you to have set up an account and API key with tenon.io.
   
 ## Todo
 - Unit tests.
-- Currently, due to CentOS not supporting Chrome, this tool can only be run
-  locally (for now).
-- Create Docker container for this tool.
+- ~~Currently, due to CentOS not supporting Chrome, this tool can only be run
+  locally (for now).~~
+- ~~Create Docker container for this tool.~~
  
