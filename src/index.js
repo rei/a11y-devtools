@@ -48,13 +48,19 @@ async function createTenonReport(opts) {
 
 const tenonCheckSource = function tenonCheckSource(o) {
   return new Promise((resolve, reject) => {
-    const tenonApi = new Tenon(globalOpts.tenon);
+    const tenonOptions = globalOpts.options.tenon;
+    const tenonApi = new Tenon(tenonOptions);
 
     console.log('[Tenon] Checking source..');
+    console.log('[Tenon] Options:');
+    console.log(`[Tenon]   projectID: ${tenonOptions.projectID}`);
+    console.log(`[Tenon]   docID:     ${tenonOptions.docID}`);
+    console.log(`[Tenon]   level:     ${tenonOptions.level}`);
+
     tenonApi.checkSrc(o.content, {
-      projectID: globalOpts.tenon.projectID,
+      projectID: tenonOptions.projectID,
       docID: o.docID,
-      level: 'AA',
+      level: tenonOptions.level,
     }, (err, result) => {
       if (err) {
         reject(err);
@@ -113,7 +119,7 @@ const getPage = async function getPage(docID, f) {
     // Must be true.
     ignoreHTTPSErrors: true,
 
-  }, globalOpts.browser));
+  }, globalOpts.options.browser));
   const page = await browser.newPage();
   return {
     docID,
