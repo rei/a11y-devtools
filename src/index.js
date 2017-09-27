@@ -8,34 +8,36 @@ const path = require('path');
 let globalOpts;
 
 const tenonCreateReport = function tenonRunReport(opts) {
-  const localOpts = opts;
+  if (!globalOpts.debug) {
+    const localOpts = opts;
 
-  return new Promise((resolve, reject) => {
-    console.log('[Tenon] Creating report..');
-    const reportFilename = `${opts.docID}.html` || 'a11y-report.html';
+    return new Promise((resolve, reject) => {
+      console.log('[Tenon] Creating report..');
+      const reportFilename = `${opts.docID}.html` || 'a11y-report.html';
 
-    // Create reports dir if it doesn't already exist.
-    const cwd = process.cwd();
-    const reportsDir = path.join(cwd, 'reports');
-    const reportFile = path.join(reportsDir, reportFilename);
+      // Create reports dir if it doesn't already exist.
+      const cwd        = process.cwd();
+      const reportsDir = path.join(cwd, 'reports');
+      const reportFile = path.join(reportsDir, reportFilename);
 
-    if (!fs.existsSync(reportsDir)) {
-      console.log('Creating reports directory..');
-      fs.mkdirSync(reportsDir);
-    }
-
-    tenonReporters.HTML(localOpts.results, (err1, report) => {
-      if (err1) {
-        reject(err1);
+      if (!fs.existsSync(reportsDir)) {
+        console.log('Creating reports directory..');
+        fs.mkdirSync(reportsDir);
       }
 
-      console.log(`[Tenon] Writing report to ${reportFilename}.`);
-      fs.writeFile(reportFile, report, (err2) => {
-        reject(err2);
+      tenonReporters.HTML(localOpts.results, (err1, report) => {
+        if (err1) {
+          reject(err1);
+        }
+
+        console.log(`[Tenon] Writing report to ${reportFilename}.`);
+        fs.writeFile(reportFile, report, (err2) => {
+          reject(err2);
+        });
+        resolve(report);
       });
-      resolve(report);
     });
-  });
+  }
 };
 
 async function createTenonReport(opts) {
@@ -63,17 +65,20 @@ const tenonCheckSource = function tenonCheckSource(o) {
 };
 
 async function runTenon(opts) {
-  const localOpts = await opts;
-  let results;
+  if (!globalOpts.debug) {
+    const localOpts = await opts;
+    let results;
 
-  try {
-    results = await tenonCheckSource(localOpts);
-  } catch (e) {
-    console.error(e);
+    try {
+      results = await tenonCheckSource(localOpts);
+    } catch (e) {
+      console.error(e);
+    }
+    return Object.assign({}, localOpts, {
+      results,
+    });
   }
-  return Object.assign({}, localOpts, {
-    results,
-  });
+  console.log('[Tenon] Skipping Tenon checks.');
 }
 
 /**
@@ -137,7 +142,6 @@ function init(opts) {
     run,
   };
 }
-
 
 module.exports = {
   init,
