@@ -48,13 +48,13 @@ async function createTenonReport(opts) {
 
 const tenonCheckSource = function tenonCheckSource(o) {
   return new Promise((resolve, reject) => {
-    const tenonOptions = globalOpts.options.tenon;
+    const tenonOptions = globalOpts.tenon;
     const tenonApi = new Tenon(tenonOptions);
 
     console.log('[Tenon] Checking source..');
     console.log('[Tenon] Options:');
     console.log(`[Tenon]   projectID: ${tenonOptions.projectID}`);
-    console.log(`[Tenon]   docID:     ${tenonOptions.docID}`);
+    console.log(`[Tenon]   docID:     ${o.docID}`);
     console.log(`[Tenon]   level:     ${tenonOptions.level}`);
 
     tenonApi.checkSrc(o.content, {
