@@ -119,7 +119,7 @@ const getPage = async function getPage(docID, f) {
     // Must be true.
     ignoreHTTPSErrors: true,
 
-  }, globalOpts.options.browser));
+  }, globalOpts.browser));
   const page = await browser.newPage();
   return {
     docID,
