@@ -108,25 +108,42 @@ async function getContent(optsIn) {
   });
 }
 
+/**
+ * Launch browser, get page.
+ * @param {String} docID Tenon docID.
+ * @param {Function} f The puppeteer test commands.
+ * @returns {Promise.<{docID: *, browser: *, page: *, f: *}>}
+ */
 const getPage = async function getPage(docID, f) {
   console.log('[Chrome] Getting browser instance..');
-  const browser = await puppeteer.launch(Object.assign({}, {
 
-    // Chrome launch options.
-    // See https://github.com/GoogleChrome/puppeteer/issues/290#issuecomment-322851507
-    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+  try {
+    const browser = await puppeteer.launch(Object.assign({}, {
 
-    // Must be true.
-    ignoreHTTPSErrors: true,
+      // Chrome launch options.
+      // See https://github.com/GoogleChrome/puppeteer/issues/290#issuecomment-322851507
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
 
-  }, globalOpts.browser));
-  const page = await browser.newPage();
-  return {
-    docID,
-    browser,
-    page,
-    f,
-  };
+      // Must be true.
+      ignoreHTTPSErrors: true,
+
+    }, globalOpts.browser));
+
+    const page = await browser.newPage();
+    return {
+      docID,
+      browser,
+      page,
+      f,
+    };
+
+  } catch (e) {
+    // Unable to get browser instance.
+    // Log error and exit script.
+    console.error(e);
+    process.exit(1);
+  }
+
 };
 
 const run = R.compose(
